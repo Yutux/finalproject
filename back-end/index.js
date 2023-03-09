@@ -1,11 +1,18 @@
 import express  from "express";
 import mongoose from "mongoose";
 import dotenv  from "dotenv";
+import morgan   from "morgan";
+import usersRouter from "./src/Routers/usersRouters.js";
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT;
 const db = process.env.MONGODB_URI;
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(express.raw());
+app.use(morgan("combined"));
 
 mongoose.connect(db).then(() => {
     console.log("Connected to MongoDB");
@@ -16,3 +23,4 @@ mongoose.connect(db).then(() => {
     console.log(err);
 });
 
+app.use('/user', usersRouter);
