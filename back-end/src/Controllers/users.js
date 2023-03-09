@@ -7,7 +7,7 @@ export async function signUp(req, res){
     user.save()
         .then(() => res.status(201).json({message: "User created"}))
         .catch(err => res.status(400).json({message: err.message}));
-        res.json({user: user});
+    
 }
 
 export function logIn(req, res){};
