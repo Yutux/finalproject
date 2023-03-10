@@ -16,7 +16,7 @@ export default function SignupForm() {
 		if (passwordInput !== confirmPasswordInput) {
 			setSignupMessage("Les mots de passe ne correspondent pas");
 		} else {
-			request('/signup', 'POST', {
+			request('/user/signup', 'POST', {
 				email: emailInput,
 				password: passwordInput,
 				pseudo: pseudoInput,

@@ -7,5 +7,5 @@ export default async function request(url, method, data = {}) {
         },
         body: JSON.stringify(data),
     });
-    return await response.json();
+    return {data: await response.json(), status: response.status};
 }
