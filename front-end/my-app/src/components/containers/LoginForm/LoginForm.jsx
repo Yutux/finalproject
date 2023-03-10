@@ -8,21 +8,23 @@ export default function LoginForm() {
 
 	function handleSubmit(e) {
 		e.preventDefault();
-		request('/users/login', 'POST', 
-		{ 
+		request('/user/login', 'POST', { 
 			email: emailInput, 
 			password: passwordInput 
-		})
-		.then((response) => {
+		}).then((response) => {
 			if (response.status === 200) {
-				setLoginMessage("Vous êtes connecté");
+				setLoginMessage("Connexion réussie");
+				
+			} else {
+				setLoginMessage("Erreur lors de la connexion");
 			}
-		})
+		});
 	}
 	
 	return (
 		<div>
 			<h2>Connexion</h2>
+			<p>{loginMeassage}</p>
 			<form>
 				<input
 					autoComplete="email"
@@ -38,7 +40,7 @@ export default function LoginForm() {
 					onChange={(e) => setPasswordInput(e.target.value)}
 				/>
 				<button onClick={handleSubmit}>Valider</button>
-				<p>{loginMeassage}</p>
+				
 			</form>
 		</div>
 	);
