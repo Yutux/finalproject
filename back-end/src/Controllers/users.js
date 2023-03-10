@@ -21,21 +21,10 @@ export async function logIn(req, res){
     res.status(200).json({token: token, user: {pseudo: user.pseudo, name: user.name}});
 };
 
-export async function secretUser(req, res) {
-    const authorization = req.headers.authorization.replace('Bearer ', '');
-    //bearer token
-    jwt.verifyToken(authorization, (err, payload)=>{
-        if(err){ 
-            return res.status(401).json({message: 'Invalid token'});
-        }
-        res.status(200).json({user: payload});
-    }
-    );
-};
-
 export function logOut(req, res){
     res.status(200).json({message: "User logged out"});
 };
+
 //work in progress 
 export async function deleteUser(req, res){
     const reqData = req.params;
@@ -44,24 +33,27 @@ export async function deleteUser(req, res){
 };
 
 export async function updateUser(req, res){
-    const userData = req.params;
     const {pseudo, name} = req.body;
-    const newUser = await User.findByIdAndUpdate(userData.id, {pseudo, name});
-    res.status(200).json({user: {name, pseudo}, message: "User updated"});
-};
-
-export async function getUser(req, res){
-    const userData = req.params;
-    const authorization = req.headers.authorization.replace('Bearer ', '');
-    //bearer token
     jwt.verifyToken(authorization, async (err, payload)=>{
         if(err){ 
             return res.status(401).json({message: 'Invalid token'});
         }
-        res.status(200).json({user: payload});
+        const newUser = await User.findByIdAndUpdate(payload.id, {pseudo, name});
+        res.status(200).json({user: {pseudo: newUser.pseudo, name: newUser.name}, message: "User updated"});
     }
     );
-    
+};
+
+export async function getUser(req, res){
+    const userData = req.params;
+    jwt.verifyToken(authorization, async (err, payload)=>{
+        if(err){ 
+            return res.status(401).json({message: 'Invalid token'});
+        }
+        const user = await User.findById(payload.id);
+        res.status(200).json({user: {pseudo: user.pseudo, name: user.name}});
+    }
+    );
 };
 // work in progress
 export async function getUsers(req, res){
