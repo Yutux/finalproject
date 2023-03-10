@@ -1,4 +1,5 @@
 import User from "../Models/users.js";
+import jwt from "../libs/token.js";
 
 export async function signUp(req, res){
     const {pseudo, name, email, password} = req.body;
@@ -10,15 +11,52 @@ export async function signUp(req, res){
     
 }
 
-export function logIn(req, res){};
+export async function logIn(req, res){
+    const userLogin = req.body;
 
-export function logOut(req, res){};
+    const user = await User.findOne({email: userLogin.email});
+    if(!user) return res.status(400).json({message: "User not found"});
+    if(user.password !== userLogin.password) return res.status(400).json({message: "Wrong password"});
+    const token = jwt.signToken({id: user._id});
+    res.status(200).json({token: token, user: user});
+};
 
-export function deleteUser(req, res){};
+export async function secretUser(req, res) {
+    const authorization = req.headers.authorization.replace('Bearer ', '');
+    //bearer token
+    jwt.verifyToken(authorization, (err, payload)=>{
+        if(err){ 
+            return res.status(401).json({message: 'Invalid token'});
+        }
+        res.status(200).json({user: payload});
+    }
+    );
+};
 
-export function updateUser(req, res){};
+export function logOut(req, res){
+    res.status(200).json({message: "User logged out"});
+};
 
-export function getUser(req, res){};
+export async function deleteUser(req, res){
+    const reqData = req.params;
+    await User.findByIdAndDelete(reqData.id);
+    res.status(200).json({user: await User.find(), message: "User deleted"});
+};
 
-export function getUsers(req, res){};
+export async function updateUser(req, res){
+    const userData = req.params;
+    const {pseudo, name, email, password} = req.body;
+    const newUser = await User.findByIdAndUpdate(userData.id, {pseudo, name, email, password});
+    res.status(200).json({user: newUser});
+};
+
+export function getUser(req, res){
+    const user = req.user;
+    res.status(200).json({user: user});
+};
+
+export async function getUsers(req, res){
+    const users = await User.findById();
+    res.status(200).json({users: users});
+};
 

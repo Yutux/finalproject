@@ -18,6 +18,11 @@ const userSchema = new mongoose.Schema({
         unique: true,
         minlength: 3
     },
+    avatar: {
+        type: String,
+        //required: true,
+        nullable: true
+    },
     password: {
         type: String,
         //required: true,

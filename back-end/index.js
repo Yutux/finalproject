@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv  from "dotenv";
 import morgan   from "morgan";
 import usersRouter from "./src/Routers/usersRouters.js";
+import users from "./src/Models/users.js";
 
 dotenv.config();
 const app = express();
@@ -14,6 +15,9 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.raw());
 app.use(morgan("combined"));
 
+
+app.use('/user', usersRouter);
+
 mongoose.connect(db).then(() => {
     console.log("Connected to MongoDB");
     app.listen(port, () => {
@@ -22,5 +26,3 @@ mongoose.connect(db).then(() => {
     }).catch((err) => {
     console.log(err);
 });
-
-app.use('/user', usersRouter);
