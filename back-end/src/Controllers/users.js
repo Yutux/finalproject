@@ -4,10 +4,10 @@ import jwt from "../libs/token.js";
 export async function signUp(req, res){
     const {pseudo, name, email, password} = req.body;
 
-    if(pseudo === "") return res.status(400).json({message: "Pseudo is required"});
-    if(name === "") return res.status(400).json({message: "Name is required"});
-    if(email === "") return res.status(400).json({message: "Email is required"});
-    if(password === "") return res.status(400).json({message: "Password is required"});
+    if(!pseudo) return res.status(400).json({message: "Pseudo is required"});
+    if(!name) return res.status(400).json({message: "Name is required"});
+    if(!email) return res.status(400).json({message: "Email is required"});
+    if(!password) return res.status(400).json({message: "Password is required"});
 
     const user = await User.create({pseudo, name, email, password});
     user.save()
