@@ -3,18 +3,18 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
     pseudo: {
         type: String,
-        // required: true,
-        //unique: true,
+        required: true,
+        unique: true,
         minlength: 3
     },
     name: {
         type: String,
-        //required: true,
+        required: true,
         minlength: 3
     },
     email: {
         type: String,
-        //required: true,
+        required: true,
         unique: true,
         minlength: 3
     },
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        //required: true,
+        required: true,
         minlength: 3
     },
 });

@@ -1,4 +1,5 @@
 import React from "react";
+import request from "../../utils/request";
 
 export default function LoginForm() {
 	const [emailInput, setEmailInput] = React.useState("");
@@ -7,7 +8,16 @@ export default function LoginForm() {
 
 	function handleSubmit(e) {
 		e.preventDefault();
-		console.log("emailInput", emailInput);
+		request('/users/login', 'POST', 
+		{ 
+			email: emailInput, 
+			password: passwordInput 
+		})
+		.then((response) => {
+			if (response.status === 200) {
+				setLoginMessage("Vous êtes connecté");
+			}
+		})
 	}
 	
 	return (
